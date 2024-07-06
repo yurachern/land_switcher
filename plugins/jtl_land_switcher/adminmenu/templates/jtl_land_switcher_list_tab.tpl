@@ -1,3 +1,11 @@
-<h2>Example Tab</h2>
-Example var 1: {$example_var1}<br>
-Example var 2: {$example_var2}
+{include file='tpl_inc/model_list.tpl'
+items=$models
+includeHeader=false
+create=true
+tabs=false
+select=true
+edit=true
+search=true
+delete=true
+disable=true
+enable=true}
