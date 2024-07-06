@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jtlshopplugin>
+    <Name>JTL Landswitcher</Name>
+    <Description>Sends the client to the link depending on the country</Description>
+    <Author>Yurij Tchernykh</Author>
+    <URL>http://lands_witcher.com</URL>
+    <PluginID>jtl_land_switcher</PluginID>
+    <XMLVersion>100</XMLVersion>
+    <MinShopVersion>5.0.0</MinShopVersion>
+    <Icon></Icon>
+    <Version>1.0.0</Version>
+    <CreateDate>2024-07-06</CreateDate>
+    <Install>
+        <Adminmenu>
+            <Customlink sort="1">
+                <Name>Switcher list</Name>
+                <Filename>jtl_land_switcher_list_tab.tpl</Filename>
+            </Customlink>
+        </Adminmenu>
+    </Install>
+</jtlshopplugin>

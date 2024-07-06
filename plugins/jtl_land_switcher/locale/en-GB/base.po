@@ -1,0 +1,9 @@
+msgid "Yurij Tchernykh"
+msgstr "@todo"
+
+msgid "Sends the client to the link depending on the country"
+msgstr "@todo"
+
+msgid "Switcher list"
+msgstr "@todo"
+
