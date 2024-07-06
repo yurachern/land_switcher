@@ -6,9 +6,11 @@
 
 namespace Plugin\jtl_land_switcher;
 
-use JTL\Events\Dispatcher;
 use JTL\Plugin\Bootstrapper;
+use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
+use Laminas\Diactoros\ServerRequestFactory;
+use function Functional\first;
 
 /**
  * Class Bootstrap
@@ -22,14 +24,31 @@ class Bootstrap extends Bootstrapper
      */
     public function renderAdminMenuTab(string $tabName, int $menuID, JTLSmarty $smarty): string
     {
-        $tplPath = $this->getPlugin()->getPaths()->getAdminPath() . 'templates/';
         $smarty->assign('backendURL', $this->getPlugin()->getPaths()->getBackendURL());
         if ($tabName === 'Switcher list') {
-            return $smarty->assign('example_var1', 123)
-                ->assign('example_var2', 'Hello world!')
-                ->fetch($tplPath . 'jtl_land_switcher_list_tab.tpl');
+            return $this->renderModelTab($menuID, $smarty);
+        }
+        return parent::renderAdminMenuTab($tabName, $menuID, $smarty);
+    }
+
+    private function renderModelTab(int $menuID, JTLSmarty $smarty): string
+    {
+        $controller         = new ModelBackendController(
+            $this->getDB(),
+            $this->getCache(),
+            Shop::Container()->getAlertService(),
+            Shop::Container()->getAdminAccount(),
+            Shop::Container()->getGetText()
+        );
+        $controller->menuID = $menuID;
+        $controller->plugin = $this->getPlugin();
+        $request            = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        $response           = $controller->getResponse($request, [], $smarty);
+        if (\count($response->getHeader('location')) > 0) {
+            \header('Location:' . first($response->getHeader('location')));
+            exit();
         }
 
-        return parent::renderAdminMenuTab($tabName, $menuID, $smarty);
+        return (string)$response->getBody();
     }
 }
