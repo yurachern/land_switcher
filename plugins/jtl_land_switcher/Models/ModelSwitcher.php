@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Plugin\jtl_land_switcher\Migrations;
+namespace Plugin\jtl_land_switcher\Models;
 
 
 use Exception;
