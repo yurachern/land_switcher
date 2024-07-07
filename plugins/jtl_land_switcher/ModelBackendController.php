@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plugin\jtl_land_switcher;
 
 use JTL\Helpers\Request;
+use JTL\Plugin\Admin\InputType;
 use JTL\Plugin\PluginInterface;
 use JTL\Router\Controller\Backend\GenericModelController;
 use JTL\Shop;
@@ -35,21 +36,17 @@ class ModelBackendController extends GenericModelController
     public function getResponse(ServerRequestInterface $request, array $args, JTLSmarty $smarty): ResponseInterface
     {
         $this->smarty = $smarty;
-        $this->route = \str_replace(Shop::getAdminURL(), '', $this->plugin->getPaths()->getBackendURL());
+        $this->route = \str_replace(Shop::getAdminURL(), '', $this->plugin->getPaths()
+            ->getBackendURL());
         $this->smarty->assign('route', $this->route);
         $this->modelClass = ModelSwitcher::class;
         $this->adminBaseFile = \ltrim($this->route, '/');
         $tab = Request::getVar('action', 'overview');
-        $db = $this->getDB();
-        if ($tab != 'overview') {
-            $smarty->assign('item', ModelSwitcher::loadByAttributes(['id' => Request::getInt('id')], $db))
-                ->assign('defaultTabbertab', $this->menuID);
-        }
-        $smarty->assign('step', $tab)
+        $response = $this->handle(__DIR__ . "/adminmenu/templates/jtl_land_switcher_list_tab.tpl");
+        $smarty->assign('models')
+            ->assign('step', $tab)
             ->assign('tab', $tab)
             ->assign('action', $this->plugin->getPaths()->getBackendURL());
-
-        $response = $this->handle(__DIR__ . "/adminmenu/templates/jtl_land_switcher_list_tab.tpl");
         if ($this->step === 'detail') {
             $smarty->assign('defaultTabbertab', $this->menuID);
         }
