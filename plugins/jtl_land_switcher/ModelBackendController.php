@@ -43,8 +43,7 @@ class ModelBackendController extends GenericModelController
         $this->adminBaseFile = \ltrim($this->route, '/');
         $tab = Request::getVar('action', 'overview');
         $response = $this->handle(__DIR__ . "/adminmenu/templates/jtl_land_switcher_list_tab.tpl");
-        $smarty->assign('models')
-            ->assign('step', $tab)
+        $smarty->assign('step', $tab)
             ->assign('tab', $tab)
             ->assign('action', $this->plugin->getPaths()->getBackendURL());
         if ($this->step === 'detail') {
