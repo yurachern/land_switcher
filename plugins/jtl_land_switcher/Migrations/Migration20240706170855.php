@@ -24,9 +24,9 @@ class Migration20240706170855 extends Migration implements IMigration
         CREATE TABLE IF NOT EXISTS `jtl_land_switcher_urls` (
               `id` INT NOT NULL AUTO_INCREMENT,
               `url` VARCHAR(255) NOT NULL,
-              `tland_cEnglisch` VARCHAR(255) NOT NULL,
+              `tland_cISO` VARCHAR(5) NOT NULL,
               PRIMARY KEY (`id`),
-            INDEX tland_cEnglisch_index (tland_cEnglisch)
+            INDEX tland_cISO_index (tland_cISO)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
         ");
     }
