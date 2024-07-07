@@ -29,20 +29,17 @@ class ModelSwitcher extends DataModel
 
     public function getAttributes(): array
     {
-        static $attributes = null;
-        if ($attributes === null) {
-            $db = $this->getDB();
-            $attributes = [];
-            $id = DataAttribute::create('id', 'int', null, false, true);
-            $id->getInputConfig()->setModifyable(false);
-            $attributes['id'] = $id;
-            $attributes['url'] = DataAttribute::create('url', 'varchar', null, false);
-            $land = DataAttribute::create('tland_cISO', 'varchar', null, false);
-            $land->getInputConfig()->setInputType(InputType::SELECT);
-            $countries = $db->getCollection('SELECT cISO, cEnglisch FROM tland')->pluck('cEnglisch', 'cISO')->toArray();
-            $land->getInputConfig()->setAllowedValues($countries);
-            $attributes['land'] = $land;
-        }
+        $db = $this->getDB();
+        $attributes = [];
+        $id = DataAttribute::create('id', 'int', null, false, true);
+        $id->getInputConfig()->setModifyable(false);
+        $attributes['id'] = $id;
+        $attributes['url'] = DataAttribute::create('url', 'varchar', null, false);
+        $land = DataAttribute::create('tland_cISO', 'varchar', null, false);
+        $land->getInputConfig()->setInputType(InputType::SELECT);
+        $countries = $db->getCollection('SELECT cISO, cEnglisch FROM tland')->pluck('cEnglisch', 'cISO')->toArray();
+        $land->getInputConfig()->setAllowedValues($countries);
+        $attributes['land'] = $land;
         return $attributes;
     }
 
