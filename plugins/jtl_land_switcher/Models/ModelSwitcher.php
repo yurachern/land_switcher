@@ -5,6 +5,7 @@ namespace Plugin\jtl_land_switcher\Models;
 
 
 use Exception;
+use JTL\Helpers\Request;
 use JTL\Model\DataAttribute;
 use JTL\Model\DataModel;
 use JTL\Plugin\Admin\InputType;
@@ -18,9 +19,11 @@ class ModelSwitcher extends DataModel
 
     public function onInstanciation(): void
     {
-        if ($this->land > 0) {
-            $countries = $this->getDB()->getObjects('SELECT cEnglisch FROM tland');
-            $this->land = $countries[$this->land]->cEnglisch;
+        $tab = Request::getVar('action', 'overview');
+        if ($tab == 'overview' && isset($this->land)) {
+            $res = $this->getDB()
+                ->select('tland','cISO', $this->land);
+            $this->land = isset($res) ? $res->cEnglisch : $this->land;
         }
     }
 
@@ -34,14 +37,10 @@ class ModelSwitcher extends DataModel
             $id->getInputConfig()->setModifyable(false);
             $attributes['id'] = $id;
             $attributes['url'] = DataAttribute::create('url', 'varchar', null, false);
-            $land = DataAttribute::create('tland_cEnglisch', 'varchar', null, false);
+            $land = DataAttribute::create('tland_cISO', 'varchar', null, false);
             $land->getInputConfig()->setInputType(InputType::SELECT);
-            $countries = $db->getObjects('SELECT cISO, cEnglisch FROM tland');
-            $allowedValues = [];
-            foreach ($countries as $country) {
-                $allowedValues[] = $country->cEnglisch;
-            }
-            $land->getInputConfig()->setAllowedValues($allowedValues);
+            $countries = $db->getCollection('SELECT cISO, cEnglisch FROM tland')->pluck('cEnglisch', 'cISO')->toArray();
+            $land->getInputConfig()->setAllowedValues($countries);
             $attributes['land'] = $land;
         }
         return $attributes;
